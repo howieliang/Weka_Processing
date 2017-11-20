@@ -113,6 +113,10 @@ void keyPressed() {
     b_train = true;
     b_test = false;
   }
+  if (key == ' ') {
+    csvData.clearRows();
+    label = 0;
+  }
 }
 
 void drawMouseCursor(int _index) {
