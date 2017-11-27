@@ -117,6 +117,9 @@ void keyPressed() {
     csvData.clearRows();
     label = 0;
   }
+  if (key >= '0' && key <= '9') {
+    label = key - '0';
+  }
 }
 
 void drawMouseCursor(int _index) {

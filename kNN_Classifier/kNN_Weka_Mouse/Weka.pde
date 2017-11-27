@@ -2,6 +2,7 @@ import weka.core.converters.CSVLoader;
 import weka.classifiers.lazy.IBk;
 import weka.classifiers.Classifier;
 import weka.classifiers.AbstractClassifier;
+//import weka.classifiers.updateableClassifier;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
@@ -15,7 +16,7 @@ import java.io.File;
 
 Instances training;
 Instances data;
-AbstractClassifier cls;
+IBk cls; //extends AbstractClassifier implements UpdateableClassifier
 ArrayList<Attribute> attributes;
 
 void readCSVNominal(String fileName) throws Exception {
@@ -107,6 +108,49 @@ PGraphics getModelImage(PGraphics pg, Classifier cls, Instances training) {
         pg.stroke(255);
       }
       pg.point(x, y);
+    }
+  }
+  pg.endDraw();
+  return pg;
+}
+
+PGraphics getModelImage(PGraphics pg, Classifier cls, Instances training, int w, int h) {
+  color colors[] = {
+    color(155, 89, 182), color(63, 195, 128), color(214, 69, 65), 
+    color(82, 179, 217), color(244, 208, 63), color(242, 121, 53), 
+    color(0, 121, 53), color(128, 128, 0), color(52, 0, 128), 
+    color(128, 52, 0), color(52, 128, 0), color(128, 52, 0)
+  };
+  //drawModelImage
+  pg.beginDraw();
+  pg.rectMode(CENTER);
+  pg.background(255);
+  for (int x = 0; x <= pg.width; x+=w) {
+    for (int y = 0; y <= pg.height; y+=h) {
+      Instance inst = new DenseInstance(3);     
+      inst.setValue(training.attribute(0), (float)x); 
+      inst.setValue(training.attribute(1), (float)y); 
+
+      // "instance" has to be associated with "Instances"
+      Instances testData = new Instances("Test Data", attributes, 0);
+      testData.add(inst);
+      testData.setClassIndex(2);        
+
+      float classification = -1;
+      try {
+        // have to get the data out of Instances
+        classification = (float) cls.classifyInstance(testData.firstInstance());
+      } 
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+      pg.noStroke();
+      if (classification>=0) {
+        pg.fill(colors[(int)classification]);
+      } else {
+        pg.fill(255);
+      }
+      pg.rect(x, y, w, h);
     }
   }
   pg.endDraw();

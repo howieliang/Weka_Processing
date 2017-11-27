@@ -8,7 +8,7 @@
 import java.util.*;
 
 // What is k
-int k = 0;
+int k = 1;
 
 // Load all the data
 Table data;
@@ -24,12 +24,6 @@ void setup() {
 
 void draw() {
   background(0);
-  
-  // Increase k
-  k++;
-  if (k > 8) {
-    k-=8;
-  }
   
   // Normalize all the data between 0 and 1
   // Not really necessary for Iris dataset, but good to demo
@@ -135,5 +129,11 @@ class Neighbor {
   Neighbor(float d_, String cat_) {
     d = d_;
     cat = cat_;
+  }
+}
+
+void keyPressed() {
+if (key >= '1' && key <= '9') {
+    k = key - '0';
   }
 }
